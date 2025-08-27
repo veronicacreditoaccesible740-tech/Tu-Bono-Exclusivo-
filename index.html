@@ -1,108 +1,148 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tu Bono Exclusivo 🎲💼</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ff4e50, #f9d423);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu Bono Exclusivo 🎲💼</title>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  animation: gradientBG 5s infinite alternate;
+  color: white;
+}
 
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-    }
+@keyframes gradientBG {
+  0% {background: linear-gradient(135deg, #ff4e50, #f9d423);}
+  50% {background: linear-gradient(135deg, #f9d423, #1abc9c);}
+  100% {background: linear-gradient(135deg, #1abc9c, #ff4e50);}
+}
 
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-    }
+h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
 
-    .timer {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-      color: #ffdd57;
-    }
+p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
 
-    .button {
-      background: #00ff99;
-      color: #000;
-      font-weight: bold;
-      font-size: 1.2rem;
-      padding: 15px 30px;
-      border-radius: 30px;
-      text-decoration: none;
-      transition: transform 0.2s;
-    }
+.timer {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #ffdd57;
+}
 
-    .button:hover {
-      transform: scale(1.1);
-    }
+.progress-bar {
+  width: 80%;
+  height: 15px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
 
-    .coin {
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      background: gold;
-      border-radius: 50%;
-      animation: fall linear infinite;
-      box-shadow: 0 0 10px #ffd700;
-    }
+.progress {
+  height: 100%;
+  width: 0%;
+  background: #00ff99;
+  transition: width 1s linear;
+}
 
-    @keyframes fall {
-      0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
-  </style>
+.button {
+  background: #ffdd57;
+  color: #000;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 15px 30px;
+  border-radius: 30px;
+  text-decoration: none;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.coin, .chip {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ffd700;
+  animation: fall linear infinite;
+}
+
+.coin { background: gold; }
+.chip { background: red; width: 25px; height: 25px; box-shadow: 0 0 10px #ff0000; }
+
+@keyframes fall {
+  0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+</style>
 </head>
 <body>
-  <h1>🎲 Tu oportunidad de invertir y jugar 💼</h1>
-  <p>Serás redirigido a la oferta exclusiva en:</p>
-  <div class="timer">5</div>
-  <a class="button" href="https://t.me/sofiafernandezmanager">¡Apostá e invertí ahora!</a>
+<h1>🎲 Tu oportunidad de invertir y jugar 💼</h1>
+<p>Serás redirigido a la oferta exclusiva en:</p>
+<div class="timer">5</div>
+<div class="progress-bar"><div class="progress"></div></div>
+<a class="button" href="https://t.me/sofiafernandezmanager">¡Apostá e invertí ahora!</a>
 
-  <script>
-    // Таймер редиректа
-    let countdown = 5;
-    const timerEl = document.querySelector('.timer');
+<script>
+// Таймер
+let countdown = 5;
+const timerEl = document.querySelector('.timer');
+const progressEl = document.querySelector('.progress');
 
-    const interval = setInterval(() => {
-      countdown--;
-      timerEl.textContent = countdown;
-      if (countdown <= 0) {
-        clearInterval(interval);
-        window.location.href = "https://t.me/sofiafernandezmanager";
-      }
-    }, 1000);
+const interval = setInterval(() => {
+  countdown--;
+  timerEl.textContent = countdown;
+  progressEl.style.width = ((5 - countdown)/5*100) + '%';
+  if(countdown <= 0){
+    clearInterval(interval);
+    window.location.href = "https://t.me/sofiafernandezmanager";
+  }
+}, 1000);
 
-    // Создание падающих монет
-    function createCoin() {
-      const coin = document.createElement('div');
-      coin.classList.add('coin');
-      coin.style.left = Math.random() * 100 + 'vw';
-      coin.style.animationDuration = (3 + Math.random() * 2) + 's';
-      coin.style.width = (20 + Math.random() * 20) + 'px';
-      coin.style.height = coin.style.width;
-      document.body.appendChild(coin);
-      setTimeout(() => coin.remove(), 5000);
-    }
+// Падающие монеты
+function createCoin() {
+  const coin = document.createElement('div');
+  coin.classList.add('coin');
+  let size = 20 + Math.random()*20;
+  coin.style.width = size + 'px';
+  coin.style.height = size + 'px';
+  coin.style.left = Math.random()*100 + 'vw';
+  coin.style.animationDuration = (3 + Math.random()*2) + 's';
+  document.body.appendChild(coin);
+  setTimeout(() => coin.remove(), 5000);
+}
 
-    setInterval(createCoin, 200); // каждые 0.2 секунды новая монета
-  </script>
+// Падающие фишки
+function createChip() {
+  const chip = document.createElement('div');
+  chip.classList.add('chip');
+  chip.style.left = Math.random()*100 + 'vw';
+  chip.style.animationDuration = (3 + Math.random()*2) + 's';
+  document.body.appendChild(chip);
+  setTimeout(() => chip.remove(), 5000);
+}
+
+// Интервалы для монет и фишек
+setInterval(createCoin, 150);
+setInterval(createChip, 250);
+</script>
 </body>
 </html>
+
