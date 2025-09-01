@@ -3,146 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tu Bono Exclusivo 🎲💼</title>
+<title>Inversiones Inteligentes</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  animation: gradientBG 5s infinite alternate;
-  color: white;
-}
-
-@keyframes gradientBG {
-  0% {background: linear-gradient(135deg, #ff4e50, #f9d423);}
-  50% {background: linear-gradient(135deg, #f9d423, #1abc9c);}
-  100% {background: linear-gradient(135deg, #1abc9c, #ff4e50);}
-}
-
-h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-}
-
-p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-}
-
-.timer {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #ffdd57;
-}
-
-.progress-bar {
-  width: 80%;
-  height: 15px;
-  background: rgba(255,255,255,0.3);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-
-.progress {
-  height: 100%;
-  width: 0%;
-  background: #00ff99;
-  transition: width 1s linear;
-}
-
-.button {
-  background: #ffdd57;
-  color: #000;
-  font-weight: bold;
-  font-size: 1.2rem;
-  padding: 15px 30px;
-  border-radius: 30px;
-  text-decoration: none;
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
-.coin, .chip {
-  position: absolute;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #ffd700;
-  animation: fall linear infinite;
-}
-
-.coin { background: gold; }
-.chip { background: red; width: 25px; height: 25px; box-shadow: 0 0 10px #ff0000; }
-
-@keyframes fall {
-  0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-}
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .container {
+    max-width: 700px;
+    padding: 30px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  h1 { font-size: 32px; margin-bottom: 15px; animation: slideDown 1s ease-out; }
+  p { font-size: 16px; margin-bottom: 15px; }
+  .countdown { font-size: 28px; font-weight: bold; display: inline-block; animation: pulse 1s infinite; }
+  .progress-bar { width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden; margin: 15px 0 25px 0; }
+  .progress-fill { height: 100%; width: 0; background: #FFD700; transition: width 1s linear; }
+  .cta-button { padding: 16px 32px; border-radius: 35px; background: #FFD700; color: #1e3c72; font-weight: bold; font-size: 20px; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-bottom: 30px; }
+  .cta-button:hover { transform: scale(1.07); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+  canvas { margin-top: 20px; border-radius: 15px; background: rgba(255,255,255,0.1); padding: 15px; }
+  .arrow-up { display: inline-block; margin-left: 10px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 14px solid #FFD700; animation: bounce 1s infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-50px);} to { opacity: 1; transform: translateY(0);} }
+  @keyframes bounce { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-8px); } }
+  @media (max-width: 600px) { .container { padding: 20px; } h1 { font-size: 26px; } .countdown { font-size: 24px; } .cta-button { font-size: 18px; padding: 14px 28px; } }
 </style>
+<script>
+  let countdown = 5;
+  function redirectCountdown() {
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    counter.innerText = countdown;
+    progress.style.width = ((5 - countdown + 1)/5*100) + '%';
+    if(countdown === 0){
+      window.location.href = "https://t.me/sofiafernandezmanager";
+    } else {
+      countdown--;
+      setTimeout(redirectCountdown,1000);
+    }
+  }
+
+  // Функция плавного увеличения числа
+  function animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      obj.innerText = Math.floor(progress * (end - start) + start) + '%';
+      if(progress < 1) window.requestAnimationFrame(step);
+    };
+    window.requestAnimationFrame(step);
+  }
+  window.onload = () => {
+    redirectCountdown();
+    animateValue('investmentValue', 0, 38, 2000); // плавный рост значения инвестиций
+  }
+</script>
 </head>
 <body>
-<h1>🎲 Tu oportunidad de invertir y jugar 💼</h1>
-<p>Serás redirigido a la oferta exclusiva en:</p>
-<div class="timer">5</div>
-<div class="progress-bar"><div class="progress"></div></div>
-<a class="button" href="https://t.me/sofiafernandezmanager">¡Apostá e invertí ahora!</a>
+  <div class="container">
+    <h1>¡Bienvenido a tu oportunidad de inversión!</h1>
+    <p>Serás redirigido a nuestro Telegram en <span id="counter" class="countdown">5</span> segundos...</p>
+    <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+    <p>Recibí consejos prácticos y personalizados <span class="arrow-up"></span></p>
+    <button class="cta-button" onclick="window.location.href='https://t.me/sofiafernandezmanager'">¡Empezá a multiplicar tu dinero!</button>
+    <p>Valor actual de tus inversiones: <span id="investmentValue">0%</span></p>
 
-<script>
-// Таймер
-let countdown = 5;
-const timerEl = document.querySelector('.timer');
-const progressEl = document.querySelector('.progress');
+    <!-- Графики -->
+    <canvas id="investmentChart" height="250"></canvas>
+    <script>
+      const ctx = document.getElementById('investmentChart').getContext('2d');
 
-const interval = setInterval(() => {
-  countdown--;
-  timerEl.textContent = countdown;
-  progressEl.style.width = ((5 - countdown)/5*100) + '%';
-  if(countdown <= 0){
-    clearInterval(interval);
-    window.location.href = "https://t.me/sofiafernandezmanager";
-  }
-}, 1000);
+      const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago'];
+      const userData = [2,5,8,12,18,25,30,38];
+      const marketData = [1,3,5,7,10,14,18,22];
 
-// Падающие монеты
-function createCoin() {
-  const coin = document.createElement('div');
-  coin.classList.add('coin');
-  let size = 20 + Math.random()*20;
-  coin.style.width = size + 'px';
-  coin.style.height = size + 'px';
-  coin.style.left = Math.random()*100 + 'vw';
-  coin.style.animationDuration = (3 + Math.random()*2) + 's';
-  document.body.appendChild(coin);
-  setTimeout(() => coin.remove(), 5000);
-}
+      const investmentChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Tus Inversiones (%)', data: Array(labels.length).fill(0), borderColor: '#FFD700', backgroundColor: 'rgba(255,215,0,0.3)', fill: true, tension:0.4, pointRadius:6, pointBackgroundColor:'#FFD700', pointHoverRadius:8 },
+            { label: 'Mercado Promedio (%)', data: Array(labels.length).fill(0), borderColor: '#00FFFF', backgroundColor: 'rgba(0,255,255,0.2)', fill:true, tension:0.4, pointRadius:6, pointBackgroundColor:'#00FFFF', pointHoverRadius:8 }
+          ]
+        },
+        options: {
+          responsive: true,
+          animation: { duration: 2000 },
+          plugins: {
+            legend: { labels: { color: '#fff', font: { size: 14 } } },
+            tooltip: { backgroundColor: 'rgba(0,0,0,0.85)', titleColor: '#FFD700', bodyColor: '#fff', titleFont:{weight:'bold', size:13}, bodyFont:{size:12} }
+          },
+          scales: {
+            x: { ticks: { color:'#fff', font:{size:12} }, grid:{ color:'rgba(255,255,255,0.1)' } },
+            y: { ticks:{ color:'#fff', font:{size:12} }, grid:{ color:'rgba(255,255,255,0.1)' }, beginAtZero:true }
+          }
+        }
+      });
 
-// Падающие фишки
-function createChip() {
-  const chip = document.createElement('div');
-  chip.classList.add('chip');
-  chip.style.left = Math.random()*100 + 'vw';
-  chip.style.animationDuration = (3 + Math.random()*2) + 's';
-  document.body.appendChild(chip);
-  setTimeout(() => chip.remove(), 5000);
-}
-
-// Интервалы для монет и фишек
-setInterval(createCoin, 150);
-setInterval(createChip, 250);
-</script>
+      // Анимация графиков
+      let step = 0;
+      const interval = setInterval(() => {
+        if(step < labels.length){
+          investmentChart.data.datasets[0].data[step] = userData[step];
+          investmentChart.data.datasets[1].data[step] = marketData[step];
+          investmentChart.update();
+          step++;
+        } else clearInterval(interval);
+      }, 300);
+    </script>
+  </div>
 </body>
 </html>
-
